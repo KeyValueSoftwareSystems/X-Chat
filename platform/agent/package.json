@@ -16,6 +16,8 @@
     "@langchain/core": "^0.1.0",
     "@langchain/openai": "^0.0.15",
     "@trysiren/agent-toolkit": "^0.1.5",
+    "@trysiren/node": "^0.1.2",
+    "axios": "^1.11.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
