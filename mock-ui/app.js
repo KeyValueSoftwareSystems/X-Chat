@@ -16,15 +16,42 @@
     const loading = document.createElement('div');
     loading.id = 'loading';
     loading.className = 'msg assistant loading';
-    loading.innerHTML = `
-      <div class="bubble">
-        <div class="typing">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    
+    const messageHeader = document.createElement('div');
+    messageHeader.className = 'message-header';
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    
+    const avatarImg = document.createElement('img');
+    avatarImg.src = 'assets/Clara.png';
+    avatarImg.alt = 'Clara Johns';
+    avatar.appendChild(avatarImg);
+    
+    const nameLabel = document.createElement('span');
+    nameLabel.className = 'message-name';
+    nameLabel.textContent = 'Clara Johns';
+    
+    messageHeader.appendChild(avatar);
+    messageHeader.appendChild(nameLabel);
+    
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+    messageContent.innerHTML = `
+      Clara is thinking
+      <div class="typing">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
     `;
+    
+    bubble.appendChild(messageHeader);
+    bubble.appendChild(messageContent);
+    loading.appendChild(bubble);
     messagesEl.appendChild(loading);
     messagesEl.scrollTop = messagesEl.scrollHeight;
     return loading;
@@ -42,9 +69,42 @@
     
     const wrap = document.createElement('div');
     wrap.className = `msg ${role}${isSupport ? ' support' : ''}`;
+    
+    // Create bubble with header inside
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
-    bubble.textContent = content;
+    
+    // Create message header with avatar and name inside bubble
+    const messageHeader = document.createElement('div');
+    messageHeader.className = 'message-header';
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    
+    const avatarImg = document.createElement('img');
+    if (role === 'user') {
+      avatarImg.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face';
+      avatarImg.alt = 'User';
+    } else {
+      avatarImg.src = 'assets/Clara.png';
+      avatarImg.alt = 'Clara Johns';
+    }
+    avatar.appendChild(avatarImg);
+    
+    const nameLabel = document.createElement('span');
+    nameLabel.className = 'message-name';
+    nameLabel.textContent = role === 'user' ? 'You' : 'Clara Johns';
+    
+    messageHeader.appendChild(avatar);
+    messageHeader.appendChild(nameLabel);
+    
+    // Create content div
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+    messageContent.textContent = content;
+    
+    bubble.appendChild(messageHeader);
+    bubble.appendChild(messageContent);
     wrap.appendChild(bubble);
     messagesEl.appendChild(wrap);
     messagesEl.scrollTop = messagesEl.scrollHeight;
@@ -63,7 +123,7 @@
     showLoading();
 
     try {
-      const res = await fetch('http://localhost:3000/api/chat', {
+      const res = await fetch('http://localhost:3001/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, userId })
