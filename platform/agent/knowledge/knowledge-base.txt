@@ -1,0 +1,146 @@
+E-Commerce Store Knowledge Base
+
+=== STORE INFORMATION ===
+Store Name: TechMart Online
+Website: https://techmart.com
+Customer Service: support@techmart.com
+Phone: 1-800-TECH-MART
+Business Hours: Monday-Friday 9 AM - 8 PM EST, Saturday-Sunday 10 AM - 6 PM EST
+
+=== PRODUCT CATEGORIES ===
+1. Electronics
+   - Smartphones
+   - Laptops & Computers
+   - Tablets
+   - Audio & Headphones
+   - Gaming Consoles
+
+2. Home & Garden
+   - Kitchen Appliances
+   - Furniture
+   - Home Decor
+   - Garden Tools
+   - Outdoor Equipment
+
+3. Clothing & Fashion
+   - Men's Clothing
+   - Women's Clothing
+   - Shoes & Accessories
+   - Jewelry
+   - Bags & Wallets
+
+=== FEATURED PRODUCTS ===
+
+1. iPhone 15 Pro (SKU: APPLE-IP15P-128)
+   - Price: $999.99
+   - Rating: 4.5/5 (2,847 reviews)
+   - Colors: Natural Titanium, Blue Titanium, White Titanium, Black Titanium
+   - Storage: 128GB, 256GB, 512GB, 1TB
+   - Features: A17 Pro chip, Pro camera system, Action Button
+   - In Stock: Yes
+   - Current Discount: 5% off for first-time buyers
+
+2. MacBook Air M3 (SKU: APPLE-MBA-M3-13)
+   - Price: $1,199.99
+   - Rating: 4.7/5 (1,523 reviews)
+   - Colors: Midnight, Starlight, Silver, Space Gray
+   - Memory: 8GB, 16GB, 24GB
+   - Storage: 256GB, 512GB, 1TB, 2TB
+   - Features: M3 chip, 13.6" Liquid Retina display, up to 18 hours battery
+   - In Stock: Yes
+   - Current Discount: 10% off with code STUDENT10
+
+3. Sony WH-1000XM5 Headphones (SKU: SONY-WH1000XM5)
+   - Price: $399.99
+   - Rating: 4.6/5 (892 reviews)
+   - Colors: Black, Silver
+   - Features: Industry-leading noise canceling, 30-hour battery, multipoint connection
+   - In Stock: Limited stock
+   - Current Discount: 15% off - limited time offer
+
+4. Samsung 65" QLED 4K TV (SKU: SAM-Q80C-65)
+   - Price: $1,799.99
+   - Rating: 4.4/5 (456 reviews)
+   - Features: Quantum HDR, Smart TV with Tizen OS, Gaming Hub
+   - In Stock: Yes
+   - Current Discount: $200 off with free installation
+
+5. KitchenAid Stand Mixer (SKU: KA-ARTISAN-5QT)
+   - Price: $429.99
+   - Rating: 4.8/5 (3,241 reviews)
+   - Colors: 20+ colors available
+   - Features: 5-quart capacity, 10 speeds, includes 3 attachments
+   - In Stock: Yes
+   - Current Discount: 20% off kitchen appliances sale
+
+=== SHIPPING & DELIVERY ===
+1. Standard Shipping
+   - Cost: $5.99 (Free on orders over $35)
+   - Delivery: 3-5 business days
+
+2. Express Shipping
+   - Cost: $12.99
+   - Delivery: 1-2 business days
+
+3. Same-Day Delivery
+   - Cost: $19.99
+   - Available in major cities
+   - Order by 2 PM for same-day delivery
+
+4. In-Store Pickup
+   - Free
+   - Available within 2 hours
+   - 500+ store locations nationwide
+
+=== RETURN POLICY ===
+- 30-day return window
+- Items must be in original condition
+- Free returns on defective items
+- Return shipping cost: $6.99 (waived for Premium members)
+- Refund processed within 3-5 business days
+
+=== MEMBERSHIP PROGRAM ===
+TechMart Premium Membership - $99/year
+Benefits:
+- Free 2-day shipping on all orders
+- Exclusive member discounts (up to 25% off)
+- Early access to sales and new products
+- Free returns
+- 24/7 priority customer support
+- Extended warranty on electronics
+
+=== CURRENT PROMOTIONS ===
+1. Back to School Sale - 15% off laptops and tablets
+2. Home Improvement Sale - 20% off kitchen appliances
+3. New Customer Offer - 10% off first order with code WELCOME10
+4. Bundle Deals - iPhone + AirPods save $100
+5. Flash Sale Fridays - Different product category each week
+
+=== CUSTOMER REVIEWS HIGHLIGHTS ===
+Top Rated Products (4.7+ stars):
+- Apple AirPods Pro (4.8/5) - "Amazing noise cancellation"
+- Nintendo Switch OLED (4.7/5) - "Perfect for gaming on the go"
+- Dyson V15 Vacuum (4.9/5) - "Best vacuum I've ever owned"
+
+=== PAYMENT METHODS ===
+Accepted:
+- Credit/Debit Cards (Visa, MasterCard, American Express, Discover)
+- PayPal
+- Apple Pay
+- Google Pay
+- Buy Now, Pay Later (Klarna, Afterpay)
+- TechMart Gift Cards
+- Store Credit
+
+=== CUSTOMER SUPPORT ===
+Contact Methods:
+- Live Chat: Available 24/7 on website
+- Phone: 1-800-TECH-MART (business hours)
+- Email: support@techmart.com
+- Social Media: @TechMartSupport on Twitter/Facebook
+
+Common Issues:
+- Order tracking: Use order number on website
+- Product compatibility: Check product specifications
+- Warranty claims: Contact manufacturer or our warranty team
+- Price matching: We match competitor prices (terms apply)
