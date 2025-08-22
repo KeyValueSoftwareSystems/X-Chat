@@ -139,14 +139,13 @@
         return;
       }
 
-      if (data.source === 'kb') {
-        statusEl.textContent = 'Answered from Knowledge Base';
-        appendMessage('assistant', data.answer || '(No answer)');
-      } else if (data.source === 'escalated') {
-        statusEl.textContent = 'Escalated to Support via Siren';
-        appendMessage('assistant', data.message || "I've forwarded your question to our support team. We'll get back to you shortly.");
+      // Display the response from the API
+      if (data.success) {
+        appendMessage('assistant', data.response || 'No response received.');
+        statusEl.textContent = 'Response received';
       } else {
-        appendMessage('assistant', data.answer || 'Received.');
+        appendMessage('assistant', data.error || 'Something went wrong.');
+        statusEl.textContent = 'Error occurred';
       }
     } catch (err) {
       console.error('Network error:', err);
@@ -196,5 +195,5 @@
   let sseConnection = connectSSE();
   
   // Greet
-  appendMessage('assistant', 'Hi! I am your customer support assistant. Ask me anything about orders, returns, shipping, and more.');
+  appendMessage('assistant', 'Hey I am Clara 👋 How can I help you today?');
 })();

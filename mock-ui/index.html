@@ -347,7 +347,7 @@
         </div>
         <div class="header-info">
           <h1>Clara Johns </h1>
-          <span class="subtext">How can I help you today? 👋</span>
+          <span class="subtext">Customer Support</span>
         </div>
       </div>
       <div style="display: flex; align-items: center; gap: 8px;">
@@ -425,46 +425,8 @@
     if (chatIcon) {
       chatIcon.addEventListener('click', openChat);
     }
-
-    // Show welcome message
-    setTimeout(() => {
-      const msgDiv = document.createElement('div');
-      msgDiv.className = 'msg assistant support';
-      
-      const bubble = document.createElement('div');
-      bubble.className = 'bubble';
-      
-      // Create message header with avatar and name inside bubble
-      const messageHeader = document.createElement('div');
-      messageHeader.className = 'message-header';
-      
-      const avatar = document.createElement('div');
-      avatar.className = 'message-avatar';
-      
-      const avatarImg = document.createElement('img');
-      avatarImg.src = 'assets/Clara.png';
-      avatarImg.alt = 'Clara Johns';
-      avatar.appendChild(avatarImg);
-      
-      const nameLabel = document.createElement('span');
-      nameLabel.className = 'message-name';
-      nameLabel.textContent = 'Clara Johns';
-      
-      messageHeader.appendChild(avatar);
-      messageHeader.appendChild(nameLabel);
-      
-      const messageContent = document.createElement('div');
-      messageContent.className = 'message-content';
-      messageContent.textContent = 'Hi! I am your customer support assistant. Ask me anything about orders, returns, shipping, and more.';
-      
-      bubble.appendChild(messageHeader);
-      bubble.appendChild(messageContent);
-      msgDiv.appendChild(bubble);
-      document.getElementById('messages').appendChild(msgDiv);
-    }, 1000);
   </script>
 
-  <!-- Your existing app.js will handle the chat functionality -->
   <script src="app.js"></script>
 </body>
 </html>
