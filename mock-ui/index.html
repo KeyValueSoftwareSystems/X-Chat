@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AcmeShop - Modern E-commerce</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Modern Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #818cf8;
+      --dark: #1f2937;
+      --light: #f9fafb;
+      --gray: #9ca3af;
+      --success: #10b981;
+    }
+
+    body {
+      background-color: #f3f4f6;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* Header Styles */
+    .header {
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      font-size: 1.8rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: var(--dark);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+    }
+
+    .btn {
+      background: white;
+      color: var(--primary);
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* Products Section */
+    .products {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+      color: var(--dark);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .product-image {
+      height: 200px;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--gray);
+    }
+
+    .product-info {
+      padding: 1.5rem;
+    }
+
+    .product-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+
+    .product-price {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .add-to-cart {
+      width: 100%;
+      padding: 0.7rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .add-to-cart:hover {
+      background: #4338ca;
+    }
+
+    /* Chat Container */
+    .chat-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 380px;
+      max-width: 90%;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      max-height: 70vh;
+    }
+
+    .chat-header {
+      background: var(--primary);
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .chat-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .chat-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .chat-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .messages {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 0.8rem 1rem;
+      border-radius: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .user {
+      align-self: flex-end;
+      /* background: var(--primary); */
+      color: white;
+      border-bottom-right-radius: 0.3rem;
+    }
+
+    .assistant {
+      align-self: flex-start;
+      /* background: #f3f4f6; */
+      color: var(--dark);
+      border-bottom-left-radius: 0.3rem;
+    }
+
+    .chat-input {
+      padding: 1rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    #message-input {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 2rem;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #message-input:focus {
+      border-color: var(--primary-light);
+    }
+
+    #send-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #send-btn:hover {
+      background: #4338ca;
+    }
+
+    /* Status */
+    .status {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 0.3rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .chat-container {
+        width: 90%;
+        right: 5%;
+        bottom: 1rem;
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="#" class="logo">
+        <i class="fas fa-store"></i>
+        <span>AcmeShop</span>
+      </a>
+      
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Shop</a>
+        <a href="#">Categories</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </div>
+      
+      <div class="nav-actions">
+        <button class="icon-btn">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="icon-btn">
+          <i class="fas fa-user"></i>
+        </button>
+        <button class="icon-btn">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count">0</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Welcome to AcmeShop</h1>
+    <p>Discover amazing products at unbeatable prices. Free shipping on orders over $50!</p>
+    <button class="btn">Shop Now</button>
+  </section>
+
+  <!-- Products Section -->
+  <section class="products">
+    <h2 class="section-title">Featured Products</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-image">
+          <i class="fas fa-headphones"></i>
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Wireless Headphones</h3>
+          <p class="product-price">$99.99</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-image">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Smartphone X</h3>
+          <p class="product-price">$699.99</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-image">
+          <i class="fas fa-laptop"></i>
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Ultrabook Pro</h3>
+          <p class="product-price">$1,299.99</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-image">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Smart Watch</h3>
+          <p class="product-price">$249.99</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chat Container -->
+  <link rel="stylesheet" href="chat.css">
+  <div class="chat-container">
+    <div class="header">
+      <h1>AcmeShop Support</h1>
+      <span id="status" class="status">Online</span>
+    </div>
+    
+    <section class="chat">
+      <div id="messages" class="messages">
+        <!-- Messages will be inserted here by JavaScript -->
+      </div>
+    </section>
+    
+    <section class="composer">
+      <form id="chat-form">
+        <input id="message-input" type="text" placeholder="Type your message..." autocomplete="off" />
+        <button id="send-btn" type="submit">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    // Simple cart functionality
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', () => {
+        const count = document.querySelector('.cart-count');
+        count.textContent = parseInt(count.textContent) + 1;
+        button.textContent = 'Added!';
+        button.style.background = 'var(--success)';
+        setTimeout(() => {
+          button.textContent = 'Add to Cart';
+          button.style.background = '';
+        }, 2000);
+      });
+    });
+
+    // Chat toggle functionality
+    const chatContainer = document.querySelector('.chat-container');
+    const minimizeBtn = document.getElementById('minimize-chat');
+    const closeBtn = document.getElementById('close-chat');
+    let isMinimized = false;
+
+    minimizeBtn.addEventListener('click', () => {
+      if (isMinimized) {
+        chatContainer.style.height = '70vh';
+        document.querySelector('.messages').style.display = 'flex';
+        document.querySelector('.chat-input').style.display = 'flex';
+      } else {
+        chatContainer.style.height = '60px';
+        document.querySelector('.messages').style.display = 'none';
+        document.querySelector('.chat-input').style.display = 'none';
+      }
+      isMinimized = !isMinimized;
+    });
+
+    closeBtn.addEventListener('click', () => {
+      chatContainer.style.display = 'none';
+    });
+
+    // Show welcome message
+    setTimeout(() => {
+      const welcomeMsg = document.createElement('div');
+      welcomeMsg.className = 'message assistant fade-in';
+      welcomeMsg.textContent = '👋 Hi there! How can I help you today?';
+      document.getElementById('messages').appendChild(welcomeMsg);
+    }, 1000);
+  </script>
+
+  <!-- Your existing app.js will handle the chat functionality -->
+  <script src="app.js"></script>
+</body>
+</html>
