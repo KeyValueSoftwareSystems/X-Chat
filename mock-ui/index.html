@@ -24,19 +24,20 @@
     }
 
     body {
-      background-color: #f3f4f6;
-      color: var(--dark);
+      background-color: #ffffff;
+      color: #37352f;
       line-height: 1.6;
     }
 
-    /* Header Styles */
+    /* Header Styles - Notion-like Design */
     .header {
-      background: white;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      padding: 1rem 2rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e9e9e7;
+      padding: 0.75rem 2rem;
       position: sticky;
       top: 0;
       z-index: 100;
+      backdrop-filter: blur(8px);
     }
 
     .navbar {
@@ -45,66 +46,97 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      height: 60px;
     }
 
     .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #000000;
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      transition: opacity 0.2s ease;
+    }
+
+    .logo:hover {
+      opacity: 0.8;
     }
 
     .logo i {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
     }
 
     .nav-links {
       display: flex;
-      gap: 2rem;
+      gap: 0;
     }
 
     .nav-links a {
-      color: var(--dark);
+      color: #37352f;
       text-decoration: none;
       font-weight: 500;
-      transition: color 0.3s;
+      font-size: 0.9rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      position: relative;
     }
 
     .nav-links a:hover {
-      color: var(--primary);
+      background: #f9fafb;
+      color: #000000;
+    }
+
+    .nav-links a.active {
+      background: #000000;
+      color: #ffffff;
     }
 
     .nav-actions {
       display: flex;
-      gap: 1.5rem;
+      gap: 0.5rem;
       align-items: center;
     }
 
     .icon-btn {
       background: none;
       border: none;
-      font-size: 1.2rem;
-      color: var(--dark);
+      font-size: 1.1rem;
+      color: #37352f;
       cursor: pointer;
       position: relative;
+      padding: 0.75rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+    }
+
+    .icon-btn:hover {
+      background: #f9fafb;
+      color: #000000;
     }
 
     .cart-count {
       position: absolute;
-      top: -8px;
-      right: -8px;
-      background: var(--primary);
+      top: 4px;
+      right: 4px;
+      background: #000000;
       color: white;
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      font-size: 0.65rem;
+      font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
+      border: 2px solid #ffffff;
     }
 
     /* Hero Section */
@@ -218,151 +250,548 @@
       background: #4338ca;
     }
 
-    /* Chat Container */
-    .chat-container {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      width: 380px;
-      max-width: 90%;
-      background: white;
+    /* Chat styles are now handled by external chat.css file */
+
+    /* Product Page Styles - Notion-like Design */
+    .product-main {
+      background: #ffffff;
+      min-height: 100vh;
+      padding: 2rem 0;
+    }
+
+    .product-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    /* Product Images */
+    .product-images {
+      position: sticky;
+      top: 120px;
+    }
+
+    .main-image {
+      width: 100%;
+      height: 500px;
       border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      z-index: 1000;
-      max-height: 70vh;
+      background: #f9fafb;
+      border: 1px solid #e9e9e7;
+      margin-bottom: 1rem;
     }
 
-    .chat-header {
-      background: var(--primary);
-      color: white;
-      padding: 1rem 1.5rem;
+    .main-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .main-image:hover img {
+      transform: scale(1.05);
+    }
+
+    .thumbnail-gallery {
       display: flex;
-      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .thumbnail {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      object-fit: cover;
+      transition: all 0.2s ease;
+    }
+
+    .thumbnail:hover,
+    .thumbnail.active {
+      border-color: #000000;
+      transform: translateY(-2px);
+    }
+
+    /* Product Info */
+    .product-info-section {
+      padding-left: 2rem;
+    }
+
+    .product-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .product-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #37352f;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    .product-rating {
+      display: flex;
       align-items: center;
+      gap: 0.75rem;
     }
 
-    .chat-header h2 {
-      font-size: 1.1rem;
+    .stars {
+      display: flex;
+      gap: 0.25rem;
+      color: #fbbf24;
+    }
+
+    .rating-text {
+      color: #787774;
+      font-size: 0.9rem;
+    }
+
+    /* Price Section */
+    .price-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: #f9fafb;
+      border-radius: 16px;
+      border: 1px solid #e9e9e7;
+    }
+
+    .current-price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #000000;
+    }
+
+    .original-price {
+      font-size: 1.2rem;
+      color: #787774;
+      text-decoration: line-through;
+    }
+
+    .discount-badge {
+      background: #000000;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
       font-weight: 600;
     }
 
-    .chat-actions {
-      display: flex;
-      gap: 0.5rem;
+    /* Product Description */
+    .product-description {
+      margin-bottom: 2rem;
     }
 
-    .chat-btn {
-      background: rgba(255,255,255,0.2);
-      border: none;
-      color: white;
-      width: 32px;
-      height: 32px;
+    .product-description p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #37352f;
+    }
+
+    /* Product Features */
+    .product-features {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e9e9e7;
+    }
+
+    .product-features h3 {
+      margin-bottom: 1rem;
+      color: #37352f;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .product-features ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .product-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+      color: #37352f;
+    }
+
+    .product-features li i {
+      color: #10b981;
+      font-size: 0.9rem;
+    }
+
+    /* Product Options */
+    .product-options {
+      margin-bottom: 2rem;
+    }
+
+    .option-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .option-group label {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      color: #37352f;
+    }
+
+    .color-options {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .color-option {
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .color-option:hover,
+    .color-option.active {
+      border-color: #000000;
+      transform: scale(1.1);
+    }
+
+    .quantity-selector {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #f9fafb;
+      border: 1px solid #e9e9e7;
+      border-radius: 12px;
+      padding: 0.5rem;
+      width: fit-content;
+    }
+
+    .qty-btn {
+      background: #ffffff;
+      border: 1px solid #e9e9e7;
+      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s;
+      font-weight: 600;
+      transition: all 0.2s ease;
     }
 
-    .chat-btn:hover {
-      background: rgba(255,255,255,0.3);
+    .qty-btn:hover {
+      background: #000000;
+      color: white;
+      border-color: #000000;
     }
 
-    .messages {
+    .quantity {
+      font-weight: 600;
+      min-width: 40px;
+      text-align: center;
+      color: #37352f;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-primary {
       flex: 1;
+      background: #000000;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: #333333;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #37352f;
+      border: 1px solid #e9e9e7;
+      padding: 1rem 1.5rem;
+      border-radius: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+      border-color: #000000;
+    }
+
+    /* Shipping Info */
+    .shipping-info {
+      background: #f9fafb;
+      border: 1px solid #e9e9e7;
+      border-radius: 16px;
       padding: 1.5rem;
-      overflow-y: auto;
+    }
+
+    .shipping-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .shipping-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .shipping-item i {
+      color: #10b981;
+      font-size: 1.2rem;
+      width: 24px;
+    }
+
+    .shipping-item div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shipping-item strong {
+      color: #37352f;
+      font-size: 0.95rem;
+    }
+
+    .shipping-item span {
+      color: #787774;
+      font-size: 0.85rem;
+    }
+
+    /* Reviews Section */
+    .reviews-section {
+      background: #f9fafb;
+      border-top: 1px solid #e9e9e7;
+      padding: 3rem 0;
+      margin-top: 3rem;
+    }
+
+    .reviews-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .reviews-section h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #37352f;
+      margin-bottom: 2rem;
+    }
+
+    .rating-overview {
+      background: #ffffff;
+      border: 1px solid #e9e9e7;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .overall-rating {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .rating-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #37352f;
+    }
+
+    .total-reviews {
+      color: #787774;
+      margin-left: 1rem;
+    }
+
+    /* Review Items */
+    .reviews-list {
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
 
-    .message {
-      max-width: 80%;
-      padding: 0.8rem 1rem;
-      border-radius: 1rem;
-      font-size: 0.95rem;
-      line-height: 1.4;
+    .review-item {
+      background: #ffffff;
+      border: 1px solid #e9e9e7;
+      border-radius: 16px;
+      padding: 1.5rem;
     }
 
-    .user {
-      align-self: flex-end;
-      /* background: var(--primary); */
-      color: white;
-      border-bottom-right-radius: 0.3rem;
-    }
-
-    .assistant {
-      align-self: flex-start;
-      /* background: #f3f4f6; */
-      color: var(--dark);
-      border-bottom-left-radius: 0.3rem;
-    }
-
-    .chat-input {
-      padding: 1rem;
-      border-top: 1px solid #eee;
+    .review-header {
       display: flex;
-      gap: 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
     }
 
-    #message-input {
-      flex: 1;
-      padding: 0.8rem 1rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 2rem;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    #message-input:focus {
-      border-color: var(--primary-light);
-    }
-
-    #send-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
+    .reviewer-info {
       display: flex;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s;
+      gap: 1rem;
     }
 
-    #send-btn:hover {
-      background: #4338ca;
+    .reviewer-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
     }
 
-    /* Status */
-    .status {
+    .review-stars {
+      display: flex;
+      gap: 0.2rem;
+      color: #fbbf24;
       font-size: 0.8rem;
-      color: var(--gray);
-      margin-top: 0.3rem;
+      margin-top: 0.25rem;
+    }
+
+    .review-date {
+      color: #787774;
+      font-size: 0.85rem;
+    }
+
+    .review-text {
+      color: #37352f;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Mobile Menu Button */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #37352f;
+      cursor: pointer;
+      padding: 0.75rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-menu-btn:hover {
+      background: #f9fafb;
+      color: #000000;
     }
 
     /* Responsive */
     @media (max-width: 768px) {
+      .header {
+        padding: 0.75rem 1rem;
+      }
+
+      .navbar {
+        position: relative;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
       .nav-links {
         display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        border: 1px solid #e9e9e7;
+        border-radius: 12px;
+        margin-top: 0.5rem;
+        padding: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-links.mobile-open {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .nav-actions {
+        gap: 0.25rem;
+      }
+
+      .logo {
+        font-size: 1.2rem;
       }
       
-      .hero h1 {
+      .product-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0 1rem;
+      }
+
+      .product-info-section {
+        padding-left: 0;
+      }
+
+      .product-title {
         font-size: 2rem;
       }
-      
-      .chat-container {
-        width: 90%;
-        right: 5%;
-        bottom: 1rem;
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .overall-rating {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .reviews-container {
+        padding: 0 1rem;
       }
     }
 
@@ -383,11 +812,11 @@
     <nav class="navbar">
       <a href="#" class="logo">
         <i class="fas fa-store"></i>
-        <span>AcmeShop</span>
+        <span>PremiumShop</span>
       </a>
       
-      <div class="nav-links">
-        <a href="#">Home</a>
+      <div class="nav-links" id="nav-links">
+        <a href="#" class="active">Home</a>
         <a href="#">Shop</a>
         <a href="#">Categories</a>
         <a href="#">About</a>
@@ -395,6 +824,9 @@
       </div>
       
       <div class="nav-actions">
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
         <button class="icon-btn">
           <i class="fas fa-search"></i>
         </button>
@@ -409,69 +841,227 @@
     </nav>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <h1>Welcome to AcmeShop</h1>
-    <p>Discover amazing products at unbeatable prices. Free shipping on orders over $50!</p>
-    <button class="btn">Shop Now</button>
-  </section>
+  <!-- Product Details Page -->
+  <main class="product-main">
+    <div class="product-container">
+      <!-- Product Images Section -->
+      <div class="product-images">
+        <div class="main-image">
+          <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=600&fit=crop" alt="Premium Wireless Headphones" id="main-product-image" />
+        </div>
+        <div class="thumbnail-gallery">
+          <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&h=100&fit=crop" alt="View 1" class="thumbnail active" onclick="changeMainImage(this.src.replace('w=100&h=100', 'w=600&h=600'))" />
+          <img src="https://images.unsplash.com/photo-1484704849700-f032a568e944?w=100&h=100&fit=crop" alt="View 2" class="thumbnail" onclick="changeMainImage(this.src.replace('w=100&h=100', 'w=600&h=600'))" />
+          <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=100&h=100&fit=crop" alt="View 3" class="thumbnail" onclick="changeMainImage(this.src.replace('w=100&h=100', 'w=600&h=600'))" />
+          <img src="https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=100&h=100&fit=crop" alt="View 4" class="thumbnail" onclick="changeMainImage(this.src.replace('w=100&h=100', 'w=600&h=600'))" />
+        </div>
+      </div>
 
-  <!-- Products Section -->
-  <section class="products">
-    <h2 class="section-title">Featured Products</h2>
-    <div class="product-grid">
-      <div class="product-card">
-        <div class="product-image">
-          <i class="fas fa-headphones"></i>
+      <!-- Product Info Section -->
+      <div class="product-info-section">
+        <div class="product-header">
+          <h1 class="product-title">Premium Wireless Headphones</h1>
+          <div class="product-rating">
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <span class="rating-text">4.8 (2,847 reviews)</span>
+          </div>
         </div>
-        <div class="product-info">
-          <h3 class="product-title">Wireless Headphones</h3>
-          <p class="product-price">$99.99</p>
-          <button class="add-to-cart">Add to Cart</button>
+
+        <div class="price-section">
+          <span class="current-price">$149.99</span>
+          <span class="original-price">$199.99</span>
+          <span class="discount-badge">25% OFF</span>
         </div>
-      </div>
-      
-      <div class="product-card">
-        <div class="product-image">
-          <i class="fas fa-mobile-alt"></i>
+
+        <div class="product-description">
+          <p>Experience premium audio quality with our flagship wireless headphones. Featuring industry-leading noise cancellation, 30-hour battery life, and crystal-clear sound that brings your music to life.</p>
         </div>
-        <div class="product-info">
-          <h3 class="product-title">Smartphone X</h3>
-          <p class="product-price">$699.99</p>
-          <button class="add-to-cart">Add to Cart</button>
+
+        <div class="product-features">
+          <h3>Key Features</h3>
+          <ul>
+            <li><i class="fas fa-check"></i> Active Noise Cancellation</li>
+            <li><i class="fas fa-check"></i> 30-hour battery life</li>
+            <li><i class="fas fa-check"></i> Premium leather comfort fit</li>
+            <li><i class="fas fa-check"></i> Touch controls</li>
+            <li><i class="fas fa-check"></i> Quick charge (5 min = 3 hours)</li>
+            <li><i class="fas fa-check"></i> Compatible with all devices</li>
+          </ul>
         </div>
-      </div>
-      
-      <div class="product-card">
-        <div class="product-image">
-          <i class="fas fa-laptop"></i>
+
+        <div class="product-options">
+          <div class="option-group">
+            <label>Color</label>
+            <div class="color-options">
+              <button class="color-option active" data-color="Black" style="background: #000"></button>
+              <button class="color-option" data-color="White" style="background: #fff; border: 1px solid #e9e9e7"></button>
+              <button class="color-option" data-color="Silver" style="background: #c0c0c0"></button>
+            </div>
+          </div>
+
+          <div class="option-group">
+            <label>Quantity</label>
+            <div class="quantity-selector">
+              <button class="qty-btn" onclick="changeQuantity(-1)">-</button>
+              <span class="quantity" id="quantity">1</span>
+              <button class="qty-btn" onclick="changeQuantity(1)">+</button>
+            </div>
+          </div>
         </div>
-        <div class="product-info">
-          <h3 class="product-title">Ultrabook Pro</h3>
-          <p class="product-price">$1,299.99</p>
-          <button class="add-to-cart">Add to Cart</button>
+
+        <div class="action-buttons">
+          <button class="btn-primary add-to-cart-main">
+            <i class="fas fa-shopping-cart"></i>
+            Add to Cart
+          </button>
+          <button class="btn-secondary">
+            <i class="fas fa-heart"></i>
+            Save for Later
+          </button>
         </div>
-      </div>
-      
-      <div class="product-card">
-        <div class="product-image">
-          <i class="fas fa-clock"></i>
-        </div>
-        <div class="product-info">
-          <h3 class="product-title">Smart Watch</h3>
-          <p class="product-price">$249.99</p>
-          <button class="add-to-cart">Add to Cart</button>
+
+        <div class="shipping-info">
+          <div class="shipping-item">
+            <i class="fas fa-truck"></i>
+            <div>
+              <strong>Free Shipping</strong>
+              <span>On orders over $50</span>
+            </div>
+          </div>
+          <div class="shipping-item">
+            <i class="fas fa-undo"></i>
+            <div>
+              <strong>Easy Returns</strong>
+              <span>30-day return policy</span>
+            </div>
+          </div>
+          <div class="shipping-item">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+              <strong>2 Year Warranty</strong>
+              <span>Full manufacturer warranty</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+      <div class="reviews-container">
+        <h2>Customer Reviews</h2>
+        <div class="reviews-summary">
+          <div class="rating-overview">
+            <div class="overall-rating">
+              <span class="rating-number">4.8</span>
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+              <span class="total-reviews">Based on 2,847 reviews</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reviews-list">
+          <div class="review-item">
+            <div class="review-header">
+              <div class="reviewer-info">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" alt="John D." class="reviewer-avatar" />
+                <div>
+                  <strong>John D.</strong>
+                  <div class="review-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                </div>
+              </div>
+              <span class="review-date">2 days ago</span>
+            </div>
+            <p class="review-text">Amazing sound quality! The noise cancellation works perfectly for my daily commute. Battery life exceeds expectations.</p>
+          </div>
+
+          <div class="review-item">
+            <div class="review-header">
+              <div class="reviewer-info">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b9a4c3b0?w=40&h=40&fit=crop&crop=face" alt="Sarah M." class="reviewer-avatar" />
+                <div>
+                  <strong>Sarah M.</strong>
+                  <div class="review-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                </div>
+              </div>
+              <span class="review-date">1 week ago</span>
+            </div>
+            <p class="review-text">Super comfortable for long listening sessions. The touch controls are intuitive and responsive.</p>
+          </div>
+
+          <div class="review-item">
+            <div class="review-header">
+              <div class="reviewer-info">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="Mike R." class="reviewer-avatar" />
+                <div>
+                  <strong>Mike R.</strong>
+                  <div class="review-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </div>
+                </div>
+              </div>
+              <span class="review-date">2 weeks ago</span>
+            </div>
+            <p class="review-text">Great headphones overall. Only minor complaint is they can get a bit warm during extended use, but the sound quality makes up for it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
   <!-- Chat Container -->
   <link rel="stylesheet" href="chat.css">
-  <div class="chat-container">
+  
+  <!-- Floating Chat Icon -->
+  <button class="chat-icon" id="chat-icon">
+    <i class="fas fa-comments"></i>
+  </button>
+  
+  <div class="chat-container" id="chat-container">
     <div class="header">
-      <h1>AcmeShop Support</h1>
-      <span id="status" class="status">Online</span>
+      <div class="header-left">
+        <div class="avatar">
+          <img src="assets/Clara.png" alt="Clara Johns" />
+        </div>
+        <div class="header-info">
+          <h1>Clara Johns </h1>
+          <span class="subtext">Customer Support</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span id="status" class="status">Online</span>
+        <button class="close-chat" id="close-chat">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
     </div>
     
     <section class="chat">
@@ -483,6 +1073,9 @@
     <section class="composer">
       <form id="chat-form">
         <input id="message-input" type="text" placeholder="Type your message..." autocomplete="off" />
+        <button id="emoji-btn" type="button">
+          <i class="far fa-smile"></i>
+        </button>
         <button id="send-btn" type="submit">
           <i class="fas fa-paper-plane"></i>
         </button>
@@ -491,7 +1084,65 @@
   </div>
 
   <script>
-    // Simple cart functionality
+    // Product page functionality
+    function changeMainImage(newSrc) {
+      const mainImage = document.getElementById('main-product-image');
+      mainImage.src = newSrc;
+      
+      // Update active thumbnail
+      document.querySelectorAll('.thumbnail').forEach(thumb => {
+        thumb.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    function changeQuantity(delta) {
+      const quantityEl = document.getElementById('quantity');
+      let currentQty = parseInt(quantityEl.textContent);
+      currentQty = Math.max(1, currentQty + delta);
+      quantityEl.textContent = currentQty;
+    }
+
+    // Color option selection
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.color-option').forEach(option => {
+        option.addEventListener('click', function() {
+          document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Add to cart functionality for main product
+      const addToCartBtn = document.querySelector('.add-to-cart-main');
+      if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function() {
+          const count = document.querySelector('.cart-count');
+          const quantity = parseInt(document.getElementById('quantity').textContent);
+          count.textContent = parseInt(count.textContent) + quantity;
+          
+          // Visual feedback
+          this.innerHTML = '<i class="fas fa-check"></i> Added to Cart!';
+          this.style.background = '#10b981';
+          setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Cart';
+            this.style.background = '';
+          }, 2000);
+        });
+      }
+
+      // Save for later functionality
+      const saveBtn = document.querySelector('.btn-secondary');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+          this.innerHTML = '<i class="fas fa-heart" style="color: red;"></i> Saved!';
+          setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-heart"></i> Save for Later';
+          }, 2000);
+        });
+      }
+    });
+
+    // Simple cart functionality (legacy for old buttons)
     document.querySelectorAll('.add-to-cart').forEach(button => {
       button.addEventListener('click', () => {
         const count = document.querySelector('.cart-count');
@@ -505,39 +1156,66 @@
       });
     });
 
+    // Mobile menu functionality
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const navLinks = document.getElementById('nav-links');
+    
+    if (mobileMenuBtn && navLinks) {
+      mobileMenuBtn.addEventListener('click', function() {
+        navLinks.classList.toggle('mobile-open');
+        const icon = this.querySelector('i');
+        if (navLinks.classList.contains('mobile-open')) {
+          icon.className = 'fas fa-times';
+        } else {
+          icon.className = 'fas fa-bars';
+        }
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.navbar')) {
+          navLinks.classList.remove('mobile-open');
+          const icon = mobileMenuBtn.querySelector('i');
+          icon.className = 'fas fa-bars';
+        }
+      });
+    }
+
     // Chat toggle functionality
-    const chatContainer = document.querySelector('.chat-container');
-    const minimizeBtn = document.getElementById('minimize-chat');
+    const chatContainer = document.getElementById('chat-container');
+    const chatIcon = document.getElementById('chat-icon');
     const closeBtn = document.getElementById('close-chat');
-    let isMinimized = false;
+    let isChatOpen = false;
 
-    minimizeBtn.addEventListener('click', () => {
-      if (isMinimized) {
-        chatContainer.style.height = '70vh';
-        document.querySelector('.messages').style.display = 'flex';
-        document.querySelector('.chat-input').style.display = 'flex';
-      } else {
-        chatContainer.style.height = '60px';
-        document.querySelector('.messages').style.display = 'none';
-        document.querySelector('.chat-input').style.display = 'none';
-      }
-      isMinimized = !isMinimized;
-    });
+    // Set initial state to closed
+    chatContainer.classList.add('closed');
+    chatIcon.classList.add('visible');
 
-    closeBtn.addEventListener('click', () => {
-      chatContainer.style.display = 'none';
-    });
+    // Function to close chat
+    function closeChat() {
+      chatContainer.classList.add('closed');
+      chatIcon.classList.add('visible');
+      isChatOpen = false;
+    }
 
-    // Show welcome message
-    setTimeout(() => {
-      const welcomeMsg = document.createElement('div');
-      welcomeMsg.className = 'message assistant fade-in';
-      welcomeMsg.textContent = '👋 Hi there! How can I help you today?';
-      document.getElementById('messages').appendChild(welcomeMsg);
-    }, 1000);
+    // Function to open chat
+    function openChat() {
+      chatContainer.classList.remove('closed');
+      chatIcon.classList.remove('visible');
+      isChatOpen = true;
+    }
+
+    // Close button functionality
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeChat);
+    }
+
+    // Chat icon functionality
+    if (chatIcon) {
+      chatIcon.addEventListener('click', openChat);
+    }
   </script>
 
-  <!-- Your existing app.js will handle the chat functionality -->
   <script src="app.js"></script>
 </body>
 </html>
