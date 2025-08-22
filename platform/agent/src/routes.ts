@@ -26,11 +26,9 @@ export function createRoutes(llm: ChatOpenAI): Router {
   };
 
   // Main chat endpoint
-  router.get('/chat', async (req, res) => {
+  router.post('/chat', async (req, res) => {
     try {
-      // const { message, conversationId = 'default' } = req.body;
-      const message = "Send  amessage to curomer support regarding replacement of the product"
-      const conversationId = "default"
+      const { message, conversationId = 'default' } = req.body;
       
       if (!message) {
         return res.status(400).json({ error: 'Message is required' });
@@ -79,41 +77,15 @@ export function createRoutes(llm: ChatOpenAI): Router {
         const { webhookType, status, message, chatData, notificationId, workflowExecutionId, channel } = req.body;
 
         if (webhookType === "INBOUND_MESSAGE" && chatData?.workflowExecutionId) {
+            console.log("INBOUND_MESSAGE", message);
+            console.log("INBOUND_MESSAGE", chatData);
             if (message) {
-                // if (!conversations.has(userChat.userId)) {
-                //     conversations.set(userChat.userId, []);
-                // }
-                
-                // const msg = userChat.messages.find((m) => m.ts === message.thread_ts);
-                // console.log("Found message:",userChat, msg);
                 const convId = memoryService.getConversationIdByWorkflowId(workflowExecutionId);
                 const userData = memoryService.getUserData(convId);
-                const msg = userData?.messages.find((m: any) => m.ts === message.thread_ts);
+                console.log("Incoming message:", message);
+                const msg = userData?.escalatedMessages.find((m: any) => m.ts === message.thread_ts);
                 if (msg) {
-                    // conversations.get(userChat.userId).push({
-                    //     role: "assistant",
-                    //     content: message.text,
-                    //     timestamp: new Date().toISOString(),
-                    //     source: "agent",
-                    // });
-
-                    // sirenClient.message.send({
-                    //     recipientValue: userChat.email,
-                    //     channel: "EMAIL",
-                    //     templateName: "email",
-                    //     templateVariables: {
-                    //         query: msg.text,
-                    //         solution: message.text,
-                    //     },
-                    // });
-                    // Send to client via SSE if connected
-                    // sendToUser(userChat.userId, {
-                    //     type: "new_message",
-                    //     role: "assistant",
-                    //     isSupport: true, // Mark as support message
-                    //     content: "Your query has been resolved. Please check your email for the solution.",
-                    //     timestamp: new Date().toISOString(),
-                    // });
+                    console.log("Found message FROM SLACK:", msg);
                 }
             }
 
@@ -124,32 +96,23 @@ export function createRoutes(llm: ChatOpenAI): Router {
             // console.log(workflowExecutionId, userChat.status);
             const convId = memoryService.getConversationIdByWorkflowId(workflowExecutionId);
             const userData = memoryService.getUserData(convId);
-            if (userData.workflowExecutionId === workflowExecutionId && userData.status === "started") {
+            if (userData.workflowExecutionId === workflowExecutionId) {
                 const replies = await sirenClient.message.getReplies(notificationId);
                 const msg = replies[0];
                 console.log("Found message:", userData, msg);
-                // fidn the message from userMegssae.messgaes
-                const index = userData.messages.findIndex((m: any) => m.text === msg.text);
-                if (index !== -1) {
-                    userData.messages[index].ts = msg.ts;
-                }
+                memoryService.addEscalatedMessage(convId, msg);
             }
         }
 
         // Handle CHAT_STARTED status
         if (status === "CHAT_STARTED" && chatData?.workflowExecutionId) {
           const convId = memoryService.getConversationIdByWorkflowId(workflowExecutionId);
+          console.log("Conversation ID:", convId);
           const userData = memoryService.getUserData(convId);
-            if (userData.workflowExecutionId === chatData.workflowExecutionId && userData.status === "pending") {
+            if (userData.workflowExecutionId === chatData.workflowExecutionId) {
                 userData.chatNodeId = chatData.chatNodeId;
-                await sirenApi.sendChatMessage({
-                  chatNodeId: userData.chatNodeId,
-                  workflowExecutionId: userData.workflowExecutionId,
-                  body: userData.messages[userData.messages.length - 1].text,
-                });
                 userData.status = "started";
             }
-
             memoryService.setUserData(convId, userData);
         }
 

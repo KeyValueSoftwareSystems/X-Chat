@@ -125,7 +125,7 @@
     }, 450);
 
     try {
-      const res = await fetch('http://localhost:3001/api/chat', {
+      const res = await fetch('https://14606323fbf4.ngrok-free.app/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, userId })

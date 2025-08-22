@@ -1,8 +1,9 @@
 import "dotenv/config";
 import { SirenAgentToolkit } from "@trysiren/agent-toolkit/langchain";
 import sirenApi from "./siren";
-import { DynamicTool } from "langchain/tools";
+import { DynamicStructuredTool, DynamicTool } from "langchain/tools";
 import { SirenClient } from "@trysiren/node";
+import { z } from "zod";
 
 const sireClient = new SirenClient({
     apiToken: process.env.SIREN_API_KEY!,
@@ -36,20 +37,24 @@ const sirenToolkit = new SirenAgentToolkit({
 // Get Siren tools
 const sirenTools = sirenToolkit.getTools();
 
-export const sendChatMessageTool = new DynamicTool({
+export const sendChatMessageTool = new DynamicStructuredTool({
     name: "send_chat_message",
-    description: "Send a chat message to an already active workflow execution.",
-    func: async (input: string, userChat: any) => {
-
+    description: "Tool to escale chat to customer support, required inputs are user's message and workflowExecutionId",
+    schema: z.object({
+        message: z.string(),
+        workflowExecutionId: z.string(),
+    }),
+    func: async ({message, workflowExecutionId}) => {
+        console.log("💬 Sending chat message:", message, workflowExecutionId);
         try {
             const response = await sirenApi.sendChatMessage({
-                chatNodeId: userChat.chatNodeId,
-                workflowExecutionId: userChat.workflowExecutionId,
-                body: input,
+                chatNodeId: process.env.CHAT_NODE_ID!,
+                workflowExecutionId: workflowExecutionId,
+                body: message,
             });
 
             console.log("💬 Message sent successfully:", response.data);
-            return JSON.stringify({ status: "sent", response: response.data });
+            return JSON.stringify({ status: "escalated", response: response.data });
         } catch (error: any) {
             console.error("❌ Failed to send message:", error);
 

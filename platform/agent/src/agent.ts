@@ -31,28 +31,17 @@ export const buildCustomPrompt = async () => {
 
     return ChatPromptTemplate.fromMessages([
         new SystemMessage(
-            `You are a customer service agent for ${KB.store.name} (${KB.store.domain}).
-       Only use the information provided in the Knowledge Base (KB) JSON below.
-       
-       Knowledge Base (KB):
-       ${JSON.stringify(KB, null, 2)}
-  
-  
-       Instructions:
-       - If the user asks to connect with customer support:
-         
-         - call the 'send_chat_message' tool and pass the user’s message and userChatData.
-         - If the user asks to send an email, call the 'send_message' tool with:
-           {{{
-                recipientValue: {{email}},
-                channel: "EMAIL",
-                templateName: "Customer-Support-Agent",
-                templateVariables: {
-                    subject: {{subject}},
-                    content: {{content}},
-                },
-            }}}.
-      `
+        `You are a customer service agent for ${KB.store.name} (${KB.store.domain}).
+            Only use the information provided in the Knowledge Base (KB) JSON below.
+            
+            Knowledge Base (KB):
+            ${JSON.stringify(KB, null, 2)}
+
+        Tool Use Instructions:
+         - Use 'send_chat_message' tool to send a message to customer support ONLY if you think we need to escalate the chat to customer support. (Otherwise don't use this tool)
+         - Always provide the user's message and workflowExecutionId as input to the 'send_chat_message' tool.
+         - Make sure to provide proper message (with context) when passing the user's message to the 'send_chat_message' tool.
+         `
         ),
         ...basePrompt.promptMessages,
     ]);
@@ -82,7 +71,7 @@ export class AgentService {
             this.agentExecutor = new AgentExecutor({
                 agent,
                 tools,
-                verbose: process.env.NODE_ENV === "development",
+                verbose: true,
                 maxIterations: 5,
                 returnIntermediateSteps: true,
             });
@@ -103,16 +92,18 @@ export class AgentService {
             if (!this.memoryService.hasUserData(conversationId)) {
                 console.log("No user data found for conversationId:", conversationId);
 
-                const wfResponse = await sirenApi.triggerWorkflow({
+                const workflowResponse = await sirenApi.triggerWorkflow({
                     workflowName: process.env.CHAT_WORKFLOW_NAME!,
                     data: {},
                     notify: {
                         slack: process.env.CHAT_WORKFLOW_SLACK_CHANNEL!,
                     },
                 });
-                console.log("Workflow triggered successfully:", wfResponse);
+                console.log("Workflow triggered successfully:", workflowResponse);
+                this.memoryService.addWorkflowIdConversationIdMapping(workflowResponse.data.workflowExecutionId, conversationId);
                 this.memoryService.setUserData(conversationId, {
-                    workflowExecutionId: wfResponse.data.workflowExecutionId,
+                    workflowExecutionId: workflowResponse.data.workflowExecutionId,
+                    chatNodeId: process.env.CHAT_NODE_ID!,
                 });
             }
             // Add user message to conversation history
@@ -122,14 +113,32 @@ export class AgentService {
             const history = this.memoryService.getConversationHistory(conversationId);
 
             // Create input with history context
-            const agentInput = history ? `Previous conversation:\n${history} and userChatData:\n${this.memoryService.getUserData(conversationId)}\n\nCurrent message: ${input}` : input;
-
+            const userChat = this.memoryService.getUserData(conversationId);
+            const agentInput = history ? `Previous conversation:\n${history} workflowExecutionId: ${userChat.workflowExecutionId} \n\nCurrent message: ${input}` : input;
+            
             // Execute the agent
             const result = await this.agentExecutor.invoke({
                 input: agentInput,
             });
 
-            // result// Add assistant response to conversation history
+            // // If escalated then add to messages
+            // for (const step of result.intermediateSteps) {
+            //     if (step.action === "send_chat_message") {
+            //         try {
+            //             const toolOutput = JSON.parse(step.output);
+            //             if (toolOutput.status === "escalated") {
+            //                 // Store the escalated message
+            //                 this.memoryService.addEscalatedMessage(conversationId, step.input.message);
+            //                 console.log("📢 Message escalated and stored:", step.input.message);
+            //             }
+                        
+            //         } catch (error) {
+            //             console.error("Error parsing tool output:", error);
+            //         }
+            //     }
+            // }
+
+            // Add assistant response to conversation history
             this.memoryService.addMessage(conversationId, "assistant", result.output);
 
             return {
