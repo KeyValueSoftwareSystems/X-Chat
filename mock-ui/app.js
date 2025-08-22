@@ -63,12 +63,12 @@
     if (loading) loading.remove();
   }
 
-  function appendMessage(role, content, isSupport = false) {
+  function appendMessage(role, content, isSupport = false, withAnimation = true) {
     // Remove any existing loading indicator
     hideLoading();
     
     const wrap = document.createElement('div');
-    wrap.className = `msg ${role}${isSupport ? ' support' : ''}`;
+    wrap.className = `msg ${role}${isSupport ? ' support' : ''}${withAnimation ? ' slide-up' : ''}`;
     
     // Create bubble with header inside
     const bubble = document.createElement('div');
@@ -119,8 +119,10 @@
     const sendBtn = document.getElementById('send-btn');
     if (sendBtn) sendBtn.disabled = true;
     
-    // Show loading indicator
-    showLoading();
+    // Show loading indicator after user message animation completes (0.4s)
+    setTimeout(() => {
+      showLoading();
+    }, 450);
 
     try {
       const res = await fetch('http://localhost:3001/api/chat', {
@@ -194,6 +196,8 @@
   // Initialize SSE connection
   let sseConnection = connectSSE();
   
-  // Greet
-  appendMessage('assistant', 'Hey I am Clara 👋 How can I help you today?');
+  // Greet with smooth transition - delay to allow chat window opening animation to complete
+  setTimeout(() => {
+    appendMessage('assistant', 'Hey I am Clara 👋 How can I help you today?');
+  }, 1500);
 })();

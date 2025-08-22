@@ -185,6 +185,24 @@
   margin-bottom: 12px;
 }
 
+/* Message slide-up animation */
+.msg.slide-up {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: slideUpMessage 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideUpMessage {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .msg.user {
   justify-content: flex-end;
 }
