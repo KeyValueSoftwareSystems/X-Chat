@@ -41,8 +41,8 @@
     const messageContent = document.createElement('div');
     messageContent.className = 'message-content';
     messageContent.innerHTML = `
-      Clara is thinking
       <div class="typing">
+        <span>Thinking</span>
         <span></span>
         <span></span>
         <span></span>
