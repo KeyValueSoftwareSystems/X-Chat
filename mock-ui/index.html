@@ -333,7 +333,13 @@
 
   <!-- Chat Container -->
   <link rel="stylesheet" href="chat.css">
-  <div class="chat-container">
+  
+  <!-- Floating Chat Icon -->
+  <button class="chat-icon" id="chat-icon">
+    <i class="fas fa-comments"></i>
+  </button>
+  
+  <div class="chat-container" id="chat-container">
     <div class="header">
       <div class="header-left">
         <div class="avatar">
@@ -344,7 +350,12 @@
           <span class="subtext">How can I help you today? 👋</span>
         </div>
       </div>
-      <span id="status" class="status">Online</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span id="status" class="status">Online</span>
+        <button class="close-chat" id="close-chat">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
     </div>
     
     <section class="chat">
@@ -382,30 +393,37 @@
     });
 
     // Chat toggle functionality
-    const chatContainer = document.querySelector('.chat-container');
-    const minimizeBtn = document.getElementById('minimize-chat');
+    const chatContainer = document.getElementById('chat-container');
+    const chatIcon = document.getElementById('chat-icon');
     const closeBtn = document.getElementById('close-chat');
-    let isMinimized = false;
+    let isChatOpen = false;
 
-    if (minimizeBtn) {
-      minimizeBtn.addEventListener('click', () => {
-        if (isMinimized) {
-          chatContainer.style.height = '600px';
-          document.querySelector('.messages').style.display = 'flex';
-          document.querySelector('.composer').style.display = 'flex';
-        } else {
-          chatContainer.style.height = '60px';
-          document.querySelector('.messages').style.display = 'none';
-          document.querySelector('.composer').style.display = 'none';
-        }
-        isMinimized = !isMinimized;
-      });
+    // Set initial state to closed
+    chatContainer.classList.add('closed');
+    chatIcon.classList.add('visible');
+
+    // Function to close chat
+    function closeChat() {
+      chatContainer.classList.add('closed');
+      chatIcon.classList.add('visible');
+      isChatOpen = false;
     }
 
+    // Function to open chat
+    function openChat() {
+      chatContainer.classList.remove('closed');
+      chatIcon.classList.remove('visible');
+      isChatOpen = true;
+    }
+
+    // Close button functionality
     if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        chatContainer.style.display = 'none';
-      });
+      closeBtn.addEventListener('click', closeChat);
+    }
+
+    // Chat icon functionality
+    if (chatIcon) {
+      chatIcon.addEventListener('click', openChat);
     }
 
     // Show welcome message
