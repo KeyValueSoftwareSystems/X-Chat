@@ -35,12 +35,14 @@ export function createRoutes(llm: ChatOpenAI): Router {
                 return res.status(400).json({ error: "Message is required" });
             }
 
-            const userChat = memoryService.getUserData(conversationId);
+            let userChat: any = {}
+            if (memoryService.hasUserData(conversationId)) {
+                userChat = memoryService.getUserData(conversationId);
+            }
+
             const emailRegex = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i;
-            console.log("User chat", userChat);
             if (emailRegex.test(message)) {
                 const match = message.match(emailRegex);
-                console.log("Match", match);
                 if (match) {
                     userChat.email = match[0];
                     userChat.awaitingEmail = false;
@@ -55,6 +57,7 @@ export function createRoutes(llm: ChatOpenAI): Router {
                         success: true,
                         response: ack,
                         conversationId,
+                        email: match[0],
                     });
                 } else {
                     const prompt = "Please share a valid email address (for example: name@example.com) so our support team can follow up.";
@@ -68,7 +71,6 @@ export function createRoutes(llm: ChatOpenAI): Router {
                     });
                 }
             }
-
             // Ensure agent is initialized
             await initializeAgent();
 

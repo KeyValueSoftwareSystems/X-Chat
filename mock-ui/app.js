@@ -122,10 +122,13 @@
     const sendBtn = document.getElementById('send-btn');
     if (sendBtn) sendBtn.disabled = true;
     
-    // Show loading indicator after user message animation completes (0.4s)
-    setTimeout(() => {
-      showLoading();
-    }, 450);
+    const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
+    if (!emailRegex.test(text)) {
+      // Show loading indicator after user message animation completes (0.4s)
+      setTimeout(() => {
+        showLoading();
+      }, 450);
+    }
 
     try {
       const res = await fetch('http://localhost:3001/api/chat', {
@@ -146,6 +149,11 @@
 
       // Display the response from the API
       if (data.success) {
+        // If the user submitted an email, the backend handles it directly.
+        // We just need to display the confirmation and stop the loading indicator.
+        if (data.email) {
+            hideLoading();
+        }
         appendMessage('assistant', data.response || 'No response received.');
         statusEl.textContent = 'Response received';
       } else {
