@@ -19,12 +19,12 @@ export class MemoryService {
         this.maxMessages = maxMessages;
     }
 
-    addWorkflowIdConversationIdMapping(workflowExecutionId: string, conversationId: string): void {
-        this.wfIdCovIdMap[workflowExecutionId] = conversationId;
+    addWorkflowIdConversationIdMapping(workflowId: string, conversationId: string): void {
+        this.setUserData(`workflow:${workflowId}`, conversationId, 86400); // Expires in 24 hours
     }
 
-    getConversationIdByWorkflowId(workflowExecutionId: string): string {
-        return this.wfIdCovIdMap[workflowExecutionId];
+    getConversationIdByWorkflowId(workflowId: string): string | undefined {
+        return this.getUserData<string>(`workflow:${workflowId}`);
     }
 
     getConversationHistory(conversationId: string): string {
@@ -154,6 +154,14 @@ export class MemoryService {
         }
         userData.escalatedMessages.push(message);
         this.setUserData(conversationId, userData);
+    }
+
+    removeAnEscalatedMessage(conversationId: string, message: any): void {
+        const userData = this.getUserData(conversationId) || {};
+        if (userData.escalatedMessages) {
+            userData.escalatedMessages = userData.escalatedMessages.filter((m: any) => m.ts !== message.ts);
+            this.setUserData(conversationId, userData);
+        }
     }
 
     /**

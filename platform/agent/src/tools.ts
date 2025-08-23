@@ -7,7 +7,7 @@ import { z } from "zod";
 
 const sireClient = new SirenClient({
     apiToken: process.env.SIREN_API_KEY!,
-    // baseUrl: process.env.SIREN_API_BASE_URL!
+    baseUrl: process.env.SIREN_API_BASE_URL!
 });
 
 // Initialize Siren toolkit

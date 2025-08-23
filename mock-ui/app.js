@@ -66,6 +66,9 @@
   function appendMessage(role, content, isSupport = false, withAnimation = true) {
     // Remove any existing loading indicator
     hideLoading();
+
+    console.log("Append message:", role, content, isSupport, withAnimation);
+    
     
     const wrap = document.createElement('div');
     wrap.className = `msg ${role}${isSupport ? ' support' : ''}${withAnimation ? ' slide-up' : ''}`;
@@ -125,10 +128,10 @@
     }, 450);
 
     try {
-      const res = await fetch('https://14606323fbf4.ngrok-free.app/api/chat', {
+      const res = await fetch('http://localhost:3001/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, userId })
+        body: JSON.stringify({ message: text, conversationId: userId })
       });
 
       const data = await res.json();
@@ -170,7 +173,7 @@
 
   // Connect to SSE endpoint
   function connectSSE() {
-    const eventSource = new EventSource(`/api/events/${userId}`);
+    const eventSource = new EventSource(`http://localhost:3001/api/events/${userId}`);
     
     eventSource.onmessage = (event) => {
       try {
@@ -200,4 +203,24 @@
   setTimeout(() => {
     appendMessage('assistant', 'Hey I am Clara 👋 How can I help you today?');
   }, 1500);
+
+  // Handle chat icon click
+  const chatIcon = document.getElementById('chat-icon');
+  if (chatIcon) {
+    chatIcon.addEventListener('click', async () => {
+      try {
+        const res = await fetch('http://localhost:3001/api/trigger', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: userId })
+        });
+
+        if (!res.ok) {
+          console.error('Failed to trigger workflow:', await res.text());
+        }
+      } catch (err) {
+        console.error('Error triggering workflow:', err);
+      }
+    });
+  }
 })();

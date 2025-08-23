@@ -3,16 +3,17 @@ import { ChatOpenAI } from '@langchain/openai';
 import { AgentService } from './agent';
 import { MemoryService } from './memory';
 import sirenApi from './siren';
-import { SirenClient } from '@trysiren/node';
+import { RecipientChannel, SirenClient } from '@trysiren/node';
 
 
 export function createRoutes(llm: ChatOpenAI): Router {
   const router = Router();
   const memoryService = new MemoryService();
   const agentService = new AgentService(llm, memoryService);
+  const sseConnections = new Map(); 
   const sirenClient = new SirenClient({
     apiToken: process.env.SIREN_API_KEY!,
-    // baseUrl: process.env.SIREN_API_BASE_URL!
+    baseUrl: process.env.SIREN_API_BASE_URL!
 });
 
   // Initialize the agent service
@@ -69,6 +70,90 @@ export function createRoutes(llm: ChatOpenAI): Router {
     });
   });
 
+  router.post('/trigger', async (req, res) => {
+    try {
+      const { userId: conversationId } = req.body;
+
+      if (!conversationId) {
+        return res.status(400).json({ error: 'userId is required' });
+      }
+
+      const existingChat = memoryService.getUserData(conversationId);
+      if (existingChat) {
+        return res.json({ message: 'Chat already started', conversationId });
+      }
+
+      console.log("Triggering workflow for conversation", conversationId, process.env.CHAT_WORKFLOW_NAME, process.env.CHAT_WORKFLOW_SLACK_CHANNEL);
+      const workflowResponse = await sirenApi.triggerWorkflow({
+        workflowName: process.env.CHAT_WORKFLOW_NAME!,
+        data: {},
+        notify: {
+          slack: process.env.CHAT_WORKFLOW_SLACK_CHANNEL!,
+        },
+      });
+      console.log("Workflow triggered for conversation", conversationId, workflowResponse.data);
+      if (!workflowResponse.data) {
+        throw new Error('Workflow trigger failed to return data.');
+      }
+      
+      memoryService.setUserData(conversationId, {
+        workflowExecutionId: workflowResponse.data.workflowExecutionId,
+        chatNodeId: process.env.CHAT_NODE_ID!,
+      });
+      memoryService.addWorkflowIdConversationIdMapping(workflowResponse.data.workflowExecutionId, conversationId);
+
+      console.log(`Workflow triggered for conversation ${conversationId}: ${workflowResponse.data.workflowExecutionId}`);
+
+      res.json({
+        success: true,
+        message: 'Workflow triggered successfully.',
+        conversationId,
+        workflowExecutionId: workflowResponse.data.workflowExecutionId,
+      });
+
+    } catch (error) {
+      console.error('Error in trigger endpoint:', error);
+      res.status(500).json({ 
+        error: 'Failed to trigger workflow',
+        success: false
+      });
+    }
+  });
+
+  router.get("/events/:userId", (req, res) => {
+      const { userId } = req.params;
+
+      res.writeHead(200, {
+          "Content-Type": "text/event-stream",
+          "Cache-Control": "no-cache",
+          Connection: "keep-alive",
+      });
+
+      // Store this connection
+      sseConnections.set(userId, res);
+
+      // Remove connection on close
+      req.on("close", () => {
+          sseConnections.delete(userId);
+      });
+
+      // Send a ping to keep connection alive
+      const pingInterval = setInterval(() => {
+          if (!sseConnections.has(userId)) {
+              clearInterval(pingInterval);
+              return;
+          }
+          res.write("event: ping\ndata: {}\n\n");
+      }, 30000);
+  });
+
+  function sendToUser(userId: string, data: any) {
+      const connection = sseConnections.get(userId);
+      if (connection) {
+          connection.write(`data: ${JSON.stringify(data)}\n\n`);
+      }
+  }
+
 
   router.post("/webhook", async (req, res) => {
     try {
@@ -76,44 +161,72 @@ export function createRoutes(llm: ChatOpenAI): Router {
 
         const { webhookType, status, message, chatData, notificationId, workflowExecutionId, channel } = req.body;
 
-        if (webhookType === "INBOUND_MESSAGE" && chatData?.workflowExecutionId) {
-            console.log("INBOUND_MESSAGE", message);
-            console.log("INBOUND_MESSAGE", chatData);
-            if (message) {
-                const convId = memoryService.getConversationIdByWorkflowId(workflowExecutionId);
-                const userData = memoryService.getUserData(convId);
-                console.log("Incoming message:", message);
-                const msg = userData?.escalatedMessages.find((m: any) => m.ts === message.thread_ts);
-                if (msg) {
-                    console.log("Found message FROM SLACK:", msg);
+        if (workflowExecutionId) {
+            const convId = memoryService.getConversationIdByWorkflowId(workflowExecutionId);
+            if (!convId) {
+                console.log(`No conversation ID found for workflow ${workflowExecutionId}`);
+            } else {
+                if (webhookType === "INBOUND_MESSAGE" && chatData?.workflowExecutionId) {
+                    if (message) {
+                        const userData = memoryService.getUserData(convId);
+                        if (userData) {
+                            console.log("Incoming message:", message);
+                            const msg = userData.escalatedMessages?.find((m: any) => m.ts === message.thread_ts);
+                            console.log("Escalated message", msg);
+                            if (msg && !msg.mailSend) {
+                                sendToUser(convId, {
+                                  type: "new_message",
+                                  role: "assistant",
+                                  isSupport: true, // Mark as support message
+                                  content: "Your query has been resolved. Please check your email for the solution.",
+                                  timestamp: new Date().toISOString(),
+                                });
+
+                                const subjectResponse  = await llm.invoke(`Create a subject for the email based on the following message: query ${msg.text} and solution ${message.text} whcih should be send back to the user, Should be a single line subject.`);
+                                const contentResponse  = await llm.invoke(`Create a content for the email based on the following message: query ${msg.text} and solution ${message.text}. Only send the content of the email, do not include any additional text and variable. No salutations or closing.`); 
+
+                                const subject = subjectResponse.content.toString().replace(/"/g, '').trim();
+                                const content = contentResponse.content.toString().trim();
+                                console.log("sending email with subject", subject, "and content", content);
+                                
+                                await sirenClient.message.send({
+                                  recipientValue:"anandu.s@keyvalue.systems",
+                                  channel: RecipientChannel.EMAIL,
+                                  templateName: "Customer-Support-Agent",
+                                  templateVariables: {
+                                    subject: subject,
+                                    content: content
+                                  }
+                                })
+                                msg.mailSend = true;
+                                memoryService.removeAnEscalatedMessage(convId, msg);
+                                memoryService.addEscalatedMessage(convId, msg);
+            
+                            }
+                        }
+                    }
+                    return res.status(200).json({ success: true });
+                }
+        
+                if (webhookType === "NOTIFICATION_STATUS" && channel === "SLACK") {
+                    const userData = memoryService.getUserData(convId);
+                    if (userData && userData.workflowExecutionId === workflowExecutionId) {
+                        const replies = await sirenClient.message.getReplies(notificationId);
+                        const msg = replies[0];
+                        console.log("Found message:", userData, msg);
+                        memoryService.addEscalatedMessage(convId, msg);
+                    }
+                }
+        
+                if (status === "CHAT_STARTED" && chatData?.workflowExecutionId) {
+                  const userData = memoryService.getUserData(convId);
+                  if (userData && userData.workflowExecutionId === chatData.workflowExecutionId) {
+                      userData.chatNodeId = chatData.chatNodeId;
+                      userData.status = "started";
+                      memoryService.setUserData(convId, userData);
+                  }
                 }
             }
-
-            return res.status(200).json({ success: true });
-        }
-
-        if (webhookType === "NOTIFICATION_STATUS" && channel === "SLACK") {
-            // console.log(workflowExecutionId, userChat.status);
-            const convId = memoryService.getConversationIdByWorkflowId(workflowExecutionId);
-            const userData = memoryService.getUserData(convId);
-            if (userData.workflowExecutionId === workflowExecutionId) {
-                const replies = await sirenClient.message.getReplies(notificationId);
-                const msg = replies[0];
-                console.log("Found message:", userData, msg);
-                memoryService.addEscalatedMessage(convId, msg);
-            }
-        }
-
-        // Handle CHAT_STARTED status
-        if (status === "CHAT_STARTED" && chatData?.workflowExecutionId) {
-          const convId = memoryService.getConversationIdByWorkflowId(workflowExecutionId);
-          console.log("Conversation ID:", convId);
-          const userData = memoryService.getUserData(convId);
-            if (userData.workflowExecutionId === chatData.workflowExecutionId) {
-                userData.chatNodeId = chatData.chatNodeId;
-                userData.status = "started";
-            }
-            memoryService.setUserData(convId, userData);
         }
 
         res.status(200).json({

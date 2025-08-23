@@ -1,4 +1,3 @@
-import { BaseLanguageModel } from "langchain/base_language";
 import { AgentExecutor, createStructuredChatAgent } from "langchain/agents";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { pull } from "langchain/hub";
@@ -13,8 +12,9 @@ export interface AgentResult {
 }
 
 import { SystemMessagePromptTemplate, HumanMessagePromptTemplate } from "@langchain/core/prompts";
-import { SystemMessage } from "langchain/schema";
+// import { SystemMessage } from "langchain/schema";
 import sirenApi from "./siren";
+import { SystemMessage } from "@langchain/core/messages";
 
 // Example KB JSON (you can fetch/load dynamically)
 const KB = {
@@ -90,21 +90,7 @@ export class AgentService {
 
         try {
             if (!this.memoryService.hasUserData(conversationId)) {
-                console.log("No user data found for conversationId:", conversationId);
-
-                const workflowResponse = await sirenApi.triggerWorkflow({
-                    workflowName: process.env.CHAT_WORKFLOW_NAME!,
-                    data: {},
-                    notify: {
-                        slack: process.env.CHAT_WORKFLOW_SLACK_CHANNEL!,
-                    },
-                });
-                console.log("Workflow triggered successfully:", workflowResponse);
-                this.memoryService.addWorkflowIdConversationIdMapping(workflowResponse.data.workflowExecutionId, conversationId);
-                this.memoryService.setUserData(conversationId, {
-                    workflowExecutionId: workflowResponse.data.workflowExecutionId,
-                    chatNodeId: process.env.CHAT_NODE_ID!,
-                });
+                throw new Error("No user data found for conversationId: " + conversationId);
             }
             // Add user message to conversation history
             this.memoryService.addMessage(conversationId, "user", input);

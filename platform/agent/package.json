@@ -13,15 +13,15 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@langchain/core": "^0.1.0",
-    "@langchain/openai": "^0.0.15",
+    "@langchain/core": "^0.3.72",
+    "@langchain/openai": "^0.6.9",
     "@trysiren/agent-toolkit": "^0.1.5",
     "@trysiren/node": "^0.1.2",
     "axios": "^1.11.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "langchain": "^0.1.0",
+    "langchain": "^0.3.31",
     "zod": "^3.22.4"
   },
   "devDependencies": {
