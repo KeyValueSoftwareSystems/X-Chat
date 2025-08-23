@@ -7,7 +7,7 @@ import { Copy } from "lucide-react"
 
 export default function IntegrationsPage() {
   const agentId = "a1b2c3d4-e5f6-7890-1234-567890abcdef"
-  const scriptTag = `<script src="http://localhost:3000/widget.js" data-agent-id="${agentId}" async></script>`
+  const scriptTag = `<script src="http://localhost:3001/widget.js" data-agent-id="${agentId}" async></script>`
 
   const handleCopy = () => {
     navigator.clipboard.writeText(scriptTag)
