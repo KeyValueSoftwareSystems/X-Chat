@@ -31,7 +31,7 @@ export const buildCustomPrompt = async () => {
 
     return ChatPromptTemplate.fromMessages([
         new SystemMessage(
-        `You are a customer service agent for ${KB.store.name} (${KB.store.domain}).
+            `You are a customer service agent for ${KB.store.name} (${KB.store.domain}).
             Only use the information provided in the Knowledge Base (KB) JSON below.
             
             Knowledge Base (KB):
@@ -51,9 +51,7 @@ export class AgentService {
     private agentExecutor: AgentExecutor | null = null;
     // private memoryService: MemoryService;
 
-    constructor(private llm: any, private memoryService: MemoryService) {
-        this.memoryService = memoryService;
-    }
+    constructor(private llm: any, private memoryService: MemoryService, private sseConnections: Map<string, any>) {}
 
     async initialize() {
         try {
@@ -100,29 +98,41 @@ export class AgentService {
 
             // Create input with history context
             const userChat = this.memoryService.getUserData(conversationId);
-            const agentInput = history ? `Previous conversation:\n${history} workflowExecutionId: ${userChat.workflowExecutionId} \n\nCurrent message: ${input}` : input;
-            
+            const agentInput = history
+                ? `Previous conversation:\n${history} workflowExecutionId: ${userChat.workflowExecutionId} \n\nCurrent message: ${input}`
+                : input;
+
             // Execute the agent
             const result = await this.agentExecutor.invoke({
                 input: agentInput,
             });
 
-            // // If escalated then add to messages
-            // for (const step of result.intermediateSteps) {
-            //     if (step.action === "send_chat_message") {
-            //         try {
-            //             const toolOutput = JSON.parse(step.output);
-            //             if (toolOutput.status === "escalated") {
-            //                 // Store the escalated message
-            //                 this.memoryService.addEscalatedMessage(conversationId, step.input.message);
-            //                 console.log("📢 Message escalated and stored:", step.input.message);
-            //             }
-                        
-            //         } catch (error) {
-            //             console.error("Error parsing tool output:", error);
-            //         }
-            //     }
-            // }
+            // If escalated then add to messages
+            console.log("Intermediate steps:", result.intermediateSteps);
+
+            for (const step of result.intermediateSteps) {
+                if (step.action.tool === "send_chat_message") {
+                    try {
+                        const toolOutput = JSON.parse(step.observation);
+                        console.log("Tool output:", toolOutput);
+                        if (toolOutput.status === "escalated") {
+                            const data = {
+                                type: "new_message",
+                                role: "assistant",
+                                isSupport: true, // Mark as support message
+                                content: "Provide your email address and we will get back to you.",
+                                timestamp: new Date().toISOString(),
+                            };
+                            const connection = this.sseConnections.get(conversationId);
+                            if (connection) {
+                                connection.write(`data: ${JSON.stringify(data)}\n\n`);
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error parsing tool output:", error);
+                    }
+                }
+            }
 
             // Add assistant response to conversation history
             this.memoryService.addMessage(conversationId, "assistant", result.output);
