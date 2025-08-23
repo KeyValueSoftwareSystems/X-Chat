@@ -6,15 +6,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { DashboardLayout } from "@/components/dashboard-layout"
+import { Check } from "lucide-react"
 
 export default function IntegrationsPage() {
   const [slackBotToken, setSlackBotToken] = useState("")
   const [slackBotId, setSlackBotId] = useState("")
+  const [isSaved, setIsSaved] = useState(false)
 
   const handleSave = () => {
     // Handle saving the credentials
     console.log("Slack Bot Token:", slackBotToken)
     console.log("Slack Bot ID:", slackBotId)
+    setIsSaved(true)
+    setTimeout(() => setIsSaved(false), 2000) // Revert after 2 seconds
   }
 
   return (
@@ -52,7 +56,13 @@ export default function IntegrationsPage() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button onClick={handleSave}>Save</Button>
+            <Button onClick={handleSave} className="cursor-pointer">
+              {isSaved ? (
+                <><Check className="w-4 h-4 mr-2" />Saved</>
+              ) : (
+                "Save"
+              )}
+            </Button>
           </CardFooter>
         </Card>
       </div>

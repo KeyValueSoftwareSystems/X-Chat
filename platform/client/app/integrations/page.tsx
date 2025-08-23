@@ -1,16 +1,41 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { DashboardLayout } from "@/components/dashboard-layout"
-import { Copy } from "lucide-react"
+import { Copy, Check } from "lucide-react"
 
 export default function IntegrationsPage() {
   const agentId = "a1b2c3d4-e5f6-7890-1234-567890abcdef"
   const scriptTag = `<script src="http://localhost:3001/widget.js" data-agent-id="${agentId}" async></script>`
+  const [isCopied, setIsCopied] = useState(false)
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(scriptTag)
+    const copyToClipboard = (text: string) => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          setIsCopied(true)
+          setTimeout(() => setIsCopied(false), 2000)
+        })
+      } else {
+        // Fallback for browsers that don't support navigator.clipboard
+        const textArea = document.createElement("textarea")
+        textArea.value = text
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+        try {
+          document.execCommand('copy')
+          setIsCopied(true)
+          setTimeout(() => setIsCopied(false), 2000)
+        } catch (err) {
+          console.error('Fallback: Oops, unable to copy', err)
+        }
+        document.body.removeChild(textArea)
+      }
+    }
+    copyToClipboard(scriptTag)
   }
 
   return (
@@ -32,7 +57,13 @@ export default function IntegrationsPage() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button onClick={handleCopy}><Copy className="w-4 h-4 mr-2" />Copy Script</Button>
+            <Button onClick={handleCopy}>
+              {isCopied ? (
+                <><Check className="w-4 h-4 mr-2" />Copied!</>
+              ) : (
+                <><Copy className="w-4 h-4 mr-2" />Copy Script</>
+              )}
+            </Button>
           </CardFooter>
         </Card>
       </div>
