@@ -1,7 +1,7 @@
 <div align="center">
   <img src="mock-ui/assets/Clara.png" alt="Clara" width="150">
-  <h1>Customer Support Bot</h1>
-  <p>A comprehensive customer support solution featuring an AI-powered chat widget.</p>
+  <h1>Clara: Your AI-Powered Support Assistant</h1>
+  <p>An intelligent, embeddable chat widget designed to elevate your customer experience.</p>
   <a href="https://drive.google.com/file/d/1rbcfxQFL8mfeNBLMsORUZwggnGPvG77c/view?usp=drive_link" target="_blank">
     <img src="https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge" alt="Live Demo"/>
   </a>
