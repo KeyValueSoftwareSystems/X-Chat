@@ -13,10 +13,10 @@ This project is a comprehensive customer support solution featuring **Clara**, a
 
 ## Siren Platform Integration
 
-The backend heavily utilizes the **Siren** platform to orchestrate complex workflows:
+The backend is powered by the **Siren AI Agent Toolkit**, which is used to orchestrate complex, multi-step workflows and perform actions like sending notifications:
 
-- **Chat Behavior**: The Siren Chat Node is used to initiate and manage the conversational flow. It defines how the bot interacts with users and when to escalate to a human agent.
-- **Slack Notifications**: When a user's query requires human intervention, a Siren workflow is triggered. This workflow sends a detailed notification to a designated Slack channel, allowing the support team to see the user's query and respond.
+- **Chat Behavior**: The Siren Chat Node manages the conversation with the user. When it determines that human intervention is required, it triggers a workflow using the AI Agent Toolkit.It defines how the bot interacts with users and when to escalate to a human agent.
+- **Slack Notifications**: The chat workflow sends a detailed notification to a designated Slack channel, allowing the support team to see the user's query and respond.
 - **Email Notifications**: Siren is also used to send transactional emails. For example, when a support ticket is resolved, a webhook from Siren notifies the backend, which in turn sends an automated email to the user to inform them of the resolution.
 
 ## Architecture
